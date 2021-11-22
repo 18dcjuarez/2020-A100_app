@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// PAGES
 import 'package:gestion/src/pages/home/home_page.dart';
 import 'package:gestion/src/pages/password_restore/forgot_password_page.dart';
+
+// PROVIDERS
+import 'package:gestion/src/providers/home_provider.dart';
 
 // WIDGETS
 import 'package:gestion/src/widgets/incidencias_widgets.dart';
@@ -19,6 +25,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeProvider _homeProvider = context.read<HomeProvider>();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -62,11 +69,14 @@ class LoginPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 30),
                     IncidenciasButton(
-                      callback: () => Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()),
-                          (route) => false),
+                      callback: () {
+                        _homeProvider.currentSlide = 0;
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
+                            (route) => false);
+                      },
                       width: double.infinity,
                       text: 'INGRESAR',
                     ),
