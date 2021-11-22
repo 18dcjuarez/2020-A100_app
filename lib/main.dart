@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestion/src/pages/inbox/inbox_page.dart';
+import 'package:gestion/src/providers/incidents_provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 // GENERAL
@@ -16,11 +18,17 @@ import 'package:gestion/src/pages/password_restore/forgot_password_page.dart';
 import 'package:gestion/src/pages/root/root_page.dart';
 
 // PROVIDERS
+import 'package:gestion/src/providers/home_provider.dart';
 import 'package:gestion/src/providers/user_provider.dart';
 
 void main() async {
+  initializeDateFormatting('es_MX');
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => HomeProvider()),
+      ChangeNotifierProvider(create: (_) => IncidentsProvider()),
+      ChangeNotifierProvider(create: (_) => UserProvider())
+    ],
     child: MyApp(),
   ));
 }

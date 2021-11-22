@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestion/src/pages/inbox/inbox_page.dart';
 import 'package:gestion/src/pages/incidents_history/incidents_history_page.dart';
+import 'package:gestion/src/widgets/incidencias_bottom_menu.dart';
 import 'package:gestion/src/widgets/incidencias_widgets.dart';
 import 'package:gestion/theme.dart';
 
@@ -65,7 +66,7 @@ class HomePage extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      IncidentesHistoryPage()))),
+                                      const IncidentesHistoryPage()))),
                       SizedBox(
                         height: 350.h,
                       ),
@@ -77,38 +78,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              width: double.infinity,
-              height: 50.h,
-              decoration: const BoxDecoration(color: incidenciasDarkGrey),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => InboxPage())),
-                      child: Icon(
-                        Icons.home,
-                        color: Colors.white,
-                        size: 40.h,
-                      ),
-                    ),
-                    Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 40.h,
-                    ),
-                    Icon(
-                      Icons.manage_accounts_rounded,
-                      color: Colors.white,
-                      size: 40.h,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            const IncidenciasBottomMenu(),
           ],
         ),
       ),

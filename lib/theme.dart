@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart' show SizeExtension;
 
 // MAIN APP COLORS
 const Color incidenciasIPN = Color(0xFF6D1A42);
+const Color incidenciasESCOM = Color(0xFF006699);
 const Color incidenciasRed = Color(0xFF9F1125);
 const Color incidenciasGreen = Color(0xFF16BB2D);
 const Color incidenciasAmber = Color(0xFFF39302);
