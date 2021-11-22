@@ -70,9 +70,9 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         height: 350.h,
                       ),
-                      IncidenciasButton(
-                          text: 'ESTADÍSTICAS',
-                          callback: () => print('ESTADISTICAS'))
+                      // IncidenciasButton(
+                      //     text: 'ESTADÍSTICAS',
+                      //     callback: () => print('ESTADISTICAS'))
                     ],
                   ),
                 ),
