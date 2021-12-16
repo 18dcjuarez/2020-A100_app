@@ -19,7 +19,6 @@ class IncidentesHistoryPage extends StatefulWidget {
 class _IncidentesHistoryPageState extends State<IncidentesHistoryPage> {
   @override
   void initState() {
-    print('INI');
     Future.microtask(() => context
         .read<IncidentsProvider>()
         .getIncidentsType('permisos_economicos/'));
@@ -30,7 +29,6 @@ class _IncidentesHistoryPageState extends State<IncidentesHistoryPage> {
   Widget build(BuildContext context) {
     final IncidentsProvider? _incidentsProviderWatcher =
         context.watch<IncidentsProvider>();
-    print('PAGE');
     return Scaffold(
       body: SafeArea(
         child: Column(

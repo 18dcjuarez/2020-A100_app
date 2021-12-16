@@ -24,6 +24,9 @@ class IncidentsProvider with ChangeNotifier {
   String tipoRetardo = 'Mayor';
   List<String> tipoRetardoList = ['Mayor', 'Menor'];
 
+  String tipoOmisionMarcaje = 'Entrada';
+  List<String> tipoOmisionMarcajeList = ['Entrada', 'Salida'];
+
   int totalIncidents = 0;
 
   List<dynamic> incidents = [];
@@ -36,6 +39,24 @@ class IncidentsProvider with ChangeNotifier {
 
   Future<Response?> registerRetardo(Map<String, dynamic> body) async {
     final Response? resp = await IncidentesService().registerRetardo(body);
+    return resp;
+  }
+
+  Future<Response?> registerOmisionMarcaje(Map<String, dynamic> body) async {
+    final Response? resp =
+        await IncidentesService().registerOmisionMarcaje(body);
+    return resp;
+  }
+
+  Future<Response?> registerCambioHorario(Map<String, dynamic> body) async {
+    final Response? resp =
+        await IncidentesService().registerCambioHorario(body);
+    return resp;
+  }
+
+  Future<dynamic> registerReposicionHoras(Map<String, dynamic> body) async {
+    final dynamic resp =
+        await IncidentesService().registerReposicionHoras(body);
     return resp;
   }
 

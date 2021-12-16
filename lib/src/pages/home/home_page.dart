@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final String now =
         DateFormat('EEEEE 10, MMMM, y', 'es_MX').format(DateTime.now());
-    print('DNOW $now');
     final List<String> nowSplit = now.split(',');
     final UserProvider? _userProviderWatcher = context.watch<UserProvider>();
     final IncidentsProvider? _incidentsProviderWatcher =
@@ -62,9 +61,12 @@ class _HomePageState extends State<HomePage> {
                       size: 40.h,
                     ),
                     SizedBox(width: 20.w),
-                    Text(
-                      'Bienvenido, ${_userProviderWatcher?.user?.nombre} ${_userProviderWatcher?.user?.apPaterno} ${_userProviderWatcher?.user?.apMaterno}',
-                      style: Theme.of(context).textTheme.bodyText1,
+                    Expanded(
+                      child: Text(
+                        'Bienvenido, ${_userProviderWatcher?.user?.nombre} ${_userProviderWatcher?.user?.apPaterno} ${_userProviderWatcher?.user?.apMaterno}',
+                        maxLines: 2,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
                     ),
                   ],
                 ),
@@ -101,9 +103,6 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 350.h,
                       ),
-                      // IncidenciasButton(
-                      //     text: 'ESTADÍSTICAS',
-                      //     callback: () => print('ESTADISTICAS'))
                     ],
                   ),
                 ),

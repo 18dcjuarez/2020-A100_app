@@ -20,6 +20,33 @@ class IncidentesService {
     }
   }
 
+  Future<Response?> registerOmisionMarcaje(Map<String, dynamic> body) async {
+    try {
+      return await IncidentsRepository().registerOmisionMarcaje(body);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<Response?> registerCambioHorario(Map<String, dynamic> body) async {
+    try {
+      return await IncidentsRepository().registerCambioHorario(body);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<dynamic> registerReposicionHoras(Map<String, dynamic> body) async {
+    try {
+      return await IncidentsRepository().registerReposicionHoras(body);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<Response?> getAllIncidents(String route) async {
     try {
       return await IncidentsRepository().getAllIncidents(route);

@@ -80,7 +80,7 @@ class LoginPage extends StatelessWidget {
                         // final Response resp = await _authProviderWatcher.login(
                         //     'jvelazquezg6@gmail.com', 'Password123%');
                         final Response resp = await _authProviderWatcher.login(
-                            'dcjuarez18@outlook.com', 'Password123%');
+                            'tanyabruce@gmail.com', 'Password123%');
 
                         // await _authProviderWatcher.login(
                         //     _emailController.text,
