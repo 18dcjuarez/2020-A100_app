@@ -6,6 +6,7 @@ import 'package:gestion/src/pages/incidents_register/incidents_register_page.dar
 import 'package:gestion/src/pages/profile/profile.dart';
 import 'package:gestion/src/pages/statistics/statistics_page.dart';
 import 'package:gestion/src/providers/home_provider.dart';
+import 'package:gestion/src/providers/user_provider.dart';
 import 'package:gestion/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,7 @@ class IncidenciasBottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeProvider _homeProviderWatcher = context.watch<HomeProvider>();
     final HomeProvider _homeProviderReader = context.read<HomeProvider>();
+    final UserProvider _userProviderWatcher = context.watch<UserProvider>();
     return Container(
       width: double.infinity,
       height: 50.h,
@@ -43,43 +45,45 @@ class IncidenciasBottomMenu extends StatelessWidget {
                 size: 40.h,
               ),
             ),
-            // INBOX - SLIDE(1)
-            GestureDetector(
-              onTap: () {
-                _homeProviderReader.currentSlide = 1;
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const InboxPage()),
-                  (route) => false,
-                );
-              },
-              child: Icon(
-                Icons.email,
-                color: _homeProviderWatcher.currentSlide == 1
-                    ? incidenciasESCOM
-                    : Colors.white,
-                size: 40.h,
+            // INBOX - SLIDE(1) -- NO PERSONAL DOCENTE
+            if (_userProviderWatcher.user?.rol != "Personal docente")
+              GestureDetector(
+                onTap: () {
+                  _homeProviderReader.currentSlide = 1;
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const InboxPage()),
+                    (route) => false,
+                  );
+                },
+                child: Icon(
+                  Icons.email,
+                  color: _homeProviderWatcher.currentSlide == 1
+                      ? incidenciasESCOM
+                      : Colors.white,
+                  size: 40.h,
+                ),
               ),
-            ),
-            // CREATE INCIDENCE - SLIDE(2)
-            GestureDetector(
-              onTap: () {
-                _homeProviderReader.currentSlide = 2;
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const IncidentsRegisterPage()),
-                  (route) => false,
-                );
-              },
-              child: Icon(
-                Icons.note_add,
-                color: _homeProviderWatcher.currentSlide == 2
-                    ? incidenciasESCOM
-                    : Colors.white,
-                size: 40.h,
+            // CREATE INCIDENCE - SLIDE(2) -- ONLY PERSONAL DOCENTE
+            if (_userProviderWatcher.user?.rol == "Personal docente")
+              GestureDetector(
+                onTap: () {
+                  _homeProviderReader.currentSlide = 2;
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const IncidentsRegisterPage()),
+                    (route) => false,
+                  );
+                },
+                child: Icon(
+                  Icons.note_add,
+                  color: _homeProviderWatcher.currentSlide == 2
+                      ? incidenciasESCOM
+                      : Colors.white,
+                  size: 40.h,
+                ),
               ),
-            ),
             // STATISTICS - SLIDE(3)
             GestureDetector(
               onTap: () {

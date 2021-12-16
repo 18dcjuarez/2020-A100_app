@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gestion/src/pages/incidents_register/widgets/incidents_time_selector.dart';
+import 'package:gestion/src/widgets/incidencias_alert.dart';
 import 'package:gestion/src/widgets/incidencias_widgets.dart';
 import 'package:gestion/theme.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class IncidentsRegisterCalendar extends StatefulWidget {
-  static const String id = "/calendar";
-
-  final TextEditingController start;
-  final TextEditingController end;
-  final TextEditingController fulldate;
-
-  IncidentsRegisterCalendar(
+class IncidentsRegisterOneDayCalendar extends StatefulWidget {
+  final TextEditingController diaRetardo;
+  final TextEditingController horaRetardo;
+  final TextEditingController retardoFull;
+  const IncidentsRegisterOneDayCalendar(
       {Key? key,
-      required this.start,
-      required this.end,
-      required this.fulldate})
+      required this.diaRetardo,
+      required this.horaRetardo,
+      required this.retardoFull})
       : super(key: key);
 
   @override
-  _IncidentsRegisterCalendarState createState() =>
-      _IncidentsRegisterCalendarState();
+  _IncidentsRegisterOneDayCalendarState createState() =>
+      _IncidentsRegisterOneDayCalendarState();
 }
 
-class _IncidentsRegisterCalendarState extends State<IncidentsRegisterCalendar> {
+class _IncidentsRegisterOneDayCalendarState
+    extends State<IncidentsRegisterOneDayCalendar> {
   DateTime _focusedDay = DateTime.now().toLocal();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
-  bool correct = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               width: double.infinity,
@@ -47,7 +45,7 @@ class _IncidentsRegisterCalendarState extends State<IncidentsRegisterCalendar> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'PERIODO INCIDENCIA',
+                      'DÍA INCIDENCIA',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],
@@ -87,74 +85,66 @@ class _IncidentsRegisterCalendarState extends State<IncidentsRegisterCalendar> {
                               color: Colors.black, shape: BoxShape.circle),
                           rangeHighlightColor: incidenciasLightGrey,
                           withinRangeTextStyle: TextStyle(color: Colors.black)),
-                      onRangeSelected: (start, end, focusedDay) {
+                      onDaySelected: (selectedDay, focusedDay) =>
+                          _onDaySelected(selectedDay, focusedDay),
+                      /* onRangeSelected: (start, end, focusedDay) {
                         setState(() {
                           _selectedDay = null;
                           _focusedDay = focusedDay;
                           _rangeStart = start;
                           _rangeEnd = end;
-                          _validate3Days();
-                          widget.start.text = _rangeStart.toString();
-                          widget.end.text = _rangeEnd.toString();
-                          if (widget.end.text != "null") {
-                            widget.fulldate.text =
-                                '${widget.start.text.substring(0, 10)} a ${widget.end.text.substring(0, 10)}';
-                          }
                         });
-                      },
+                      }, */
                       onPageChanged: (focusedDay) {
                         _focusedDay = focusedDay;
                       },
                     ),
                   ),
-                  IncidenciasButton(
-                    text: "Escoger Fecha",
-                    backgroundColor:
-                        correct ? incidenciasIPN : incidenciasDarkGrey,
-                    callback: () => correct ? Navigator.pop(context) : null,
-                    /*  function: () => Alerts.showBottomScrolleable(
-                        context: context, widget: CalendarTimeSelector()), */
-                  ),
-                  SizedBox(height: 30.h),
                 ],
               ),
             ),
+            IncidenciasButton(
+              text: "continuar",
+              backgroundColor: incidenciasIPN,
+              // callback: () => Navigator.pop(context),
+              callback: () =>
+                  widget.horaRetardo.text == "" ? selectTime() : finish(),
+            ),
+            SizedBox(height: 30.h),
           ],
         ),
       ),
     );
   }
 
+  void selectTime() {
+    Alerts.showBottomScrolleable(
+        context: context,
+        widget: IncidentsTimeSelector(
+          hour: widget.horaRetardo,
+        ));
+    setState(() {});
+  }
+
+  void finish() {
+    setState(() {
+      widget.retardoFull.text =
+          '${widget.diaRetardo.text.substring(0, 10)} --- ${widget.horaRetardo.text}';
+      widget.diaRetardo.text =
+          widget.diaRetardo.text.replaceRange(11, 16, widget.horaRetardo.text);
+    });
+    Navigator.pop(context);
+  }
+
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
+        widget.diaRetardo.text = selectedDay.toString();
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
       });
-    }
-  }
-
-  void _validate3Days() {
-    if (_rangeStart != null && _rangeEnd != null) {
-      final diferenceDays =
-          (_rangeEnd!.toLocal().difference(_rangeStart!.toLocal()).inHours / 24)
-                  .round() +
-              1;
-      if (diferenceDays >= 4) {
-        setState(() {
-          correct = false;
-          _rangeStart = null;
-          _rangeEnd = null;
-        });
-        IncidenciasFlushbar.showBar(context, 'ERROR',
-            'No se pueden pedir más de 3 días económicos seguidos');
-      } else {
-        setState(() {
-          correct = true;
-        });
-      }
     }
   }
 }
