@@ -92,14 +92,16 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 30.h,
                       ),
-                      IncidenciasButton(
-                          text: "$totalPendingIncidents incidencias en curso",
-                          width: double.infinity,
-                          callback: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const IncidentesHistoryPage()))),
+                      if (_userProviderWatcher?.user?.rol == "Personal docente")
+                        IncidenciasButton(
+                            // text: "$totalPendingIncidents incidencias en curso",
+                            text: "Ver mis incidencias en curso",
+                            width: double.infinity,
+                            callback: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const IncidentesHistoryPage()))),
                       SizedBox(
                         height: 350.h,
                       ),

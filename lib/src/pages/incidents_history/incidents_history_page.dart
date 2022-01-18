@@ -22,6 +22,8 @@ class _IncidentesHistoryPageState extends State<IncidentesHistoryPage> {
     Future.microtask(() => context
         .read<IncidentsProvider>()
         .getIncidentsType('permisos_economicos/'));
+    // Future.microtask(
+    //     () => context.read<IncidentsProvider>().getAllIncidentsTotal());
     super.initState();
   }
 
@@ -29,6 +31,8 @@ class _IncidentesHistoryPageState extends State<IncidentesHistoryPage> {
   Widget build(BuildContext context) {
     final IncidentsProvider? _incidentsProviderWatcher =
         context.watch<IncidentsProvider>();
+    final IncidentsProvider _incidentsProviderReader =
+        context.read<IncidentsProvider>();
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -60,6 +64,30 @@ class _IncidentesHistoryPageState extends State<IncidentesHistoryPage> {
                       SizedBox(
                         height: 15.h,
                       ),
+                      DropdownButton<String>(
+                        isExpanded: true,
+                        value: _incidentsProviderWatcher?.selectedIncidentPath,
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_outlined,
+                          color: incidenciasIPN,
+                        ),
+                        items: _incidentsProviderWatcher?.incidentsPaths
+                            .map<DropdownMenuItem<String>>((String path) {
+                          return DropdownMenuItem(
+                            value: path,
+                            child: Text(_selectedIncident(path)),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) async {
+                          setState(() {
+                            _incidentsProviderWatcher?.selectedIncidentPath =
+                                value!;
+                          });
+                          await _incidentsProviderReader
+                              .getIncidentsType(value!);
+                          setState(() {});
+                        },
+                      ),
                       // Row(
                       //   mainAxisAlignment: MainAxisAlignment.end,
                       //   children: [
@@ -90,7 +118,9 @@ class _IncidentesHistoryPageState extends State<IncidentesHistoryPage> {
                           children:
                               _incidentsProviderWatcher?.incidents.reversed
                                   .map((e) => IncidentsHistoryItemWidget(
-                                        name: 'Día económico',
+                                        name: _selectedIncident(
+                                            _incidentsProviderWatcher
+                                                .selectedIncidentPath),
                                         date: e['fecha_solicitud']
                                             .toString()
                                             .substring(0, 10),
@@ -192,5 +222,22 @@ class _IncidentesHistoryPageState extends State<IncidentesHistoryPage> {
         ),
       ),
     );
+  }
+
+  String _selectedIncident(String? path) {
+    switch (path) {
+      case "permisos_economicos/":
+        return "Permiso económico";
+      case "retardos/":
+        return "Retardo";
+      case "omisiones/":
+        return "Omisión de marcaje";
+      case "cambios_horario/":
+        return "Cambio de horario";
+      case "reposiciones_horas/":
+        return "Reposición de horas";
+      default:
+        return "Permiso económico";
+    }
   }
 }

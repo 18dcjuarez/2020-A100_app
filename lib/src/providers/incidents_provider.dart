@@ -20,12 +20,22 @@ class IncidentsProvider with ChangeNotifier {
     'cambios_horario/',
     'reposiciones_horas/'
   ];
+  String selectedIncidentPath = 'permisos_economicos/';
 
   String tipoRetardo = 'Mayor';
   List<String> tipoRetardoList = ['Mayor', 'Menor'];
 
   String tipoOmisionMarcaje = 'Entrada';
   List<String> tipoOmisionMarcajeList = ['Entrada', 'Salida'];
+
+  String selectedApprovePath = 'aprobaciones_permisos_economicos/';
+  List<String> selectedApproveList = [
+    'aprobaciones_permisos_economicos/',
+    'aprobaciones_retardos/',
+    'aprobaciones_omisiones/',
+    'aprobaciones_cambios_horario/',
+    'aprobaciones_reposiciones_horas/'
+  ];
 
   int totalIncidents = 0;
 
@@ -75,8 +85,11 @@ class IncidentsProvider with ChangeNotifier {
       //   }
       // }).toList();
       // print('AUXPENDING ${auxPending.length}');
+      // incidents.addAll(decodedResponse);
+      // print('DECODED $decodedResponse');
       totalIncidents += decodedResponse.length;
     }).toList();
+    // print('INCIDENTS $incidents');
     notifyListeners();
   }
 
@@ -95,5 +108,27 @@ class IncidentsProvider with ChangeNotifier {
     // print('AUXPENDING ${auxPending.length}');
     incidents = decodedResponse;
     notifyListeners();
+  }
+
+  Future<void> getIncidentsToApprove(String path) async {
+    final pe = await IncidentesService().getIncidentsToAprrove(path);
+    List<dynamic> decodedResponse = [];
+    if (pe != null && pe.statusCode == 200) {
+      decodedResponse = jsonDecode(utf8.decode(pe.bodyBytes)) as List;
+    }
+    // List<dynamic> auxPending = [];
+    // decodedResponse.map((e) {
+    //   if (e['estatus_solicitud'] == "Solicitado") {
+    //     auxPending.add(e);
+    //   }
+    // }).toList();
+    // print('AUXPENDING ${auxPending.length}');
+    incidents = decodedResponse;
+    notifyListeners();
+  }
+
+  Future<Response?> incidentAction(String path) async {
+    final dynamic resp = await IncidentesService().incidentAction(path);
+    return resp;
   }
 }

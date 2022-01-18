@@ -113,4 +113,38 @@ class IncidentsRepository {
       return null;
     }
   }
+
+  Future<http.Response?> getIncidentsToAprrove(String route) async {
+    final String _path = '${dotenv.env['API_URL']}/api/$route';
+    try {
+      final token = await SharedPreferencesRepository.instance
+          .getData(SharedPreferencesKey.TOKEN);
+      Map<String, String> requestHeaders = {
+        'Accept': 'application/json',
+        'Authorization': 'JWT $token'
+      };
+      final Uri url = Uri.parse(_path);
+      return await http.get(url, headers: requestHeaders);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<http.Response?> incidentAction(String route) async {
+    final String _path = '${dotenv.env['API_URL']}/api/$route';
+    try {
+      final token = await SharedPreferencesRepository.instance
+          .getData(SharedPreferencesKey.TOKEN);
+      Map<String, String> requestHeaders = {
+        'Accept': 'application/json',
+        'Authorization': 'JWT $token'
+      };
+      final Uri url = Uri.parse(_path);
+      return await http.post(url, headers: requestHeaders);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

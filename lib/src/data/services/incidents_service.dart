@@ -55,4 +55,22 @@ class IncidentesService {
       return null;
     }
   }
+
+  Future<Response?> getIncidentsToAprrove(String route) async {
+    try {
+      return await IncidentsRepository().getIncidentsToAprrove(route);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<Response?> incidentAction(String route) async {
+    try {
+      return await IncidentsRepository().incidentAction(route);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

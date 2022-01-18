@@ -36,6 +36,7 @@ class _IncidentsDoubleTimeSelectorState
           children: [
             Expanded(
                 child: IncidenciasInput.text(
+              textInputType: TextInputType.number,
               focusNode: _startHourFocusNode,
               controller: widget.entryTime,
               placeholder: "12:00",
@@ -51,6 +52,7 @@ class _IncidentsDoubleTimeSelectorState
             ),
             Expanded(
                 child: IncidenciasInput.text(
+                    textInputType: TextInputType.number,
                     focusNode: _endHourFocusNode,
                     controller: widget.exitTime,
                     placeholder: "13:00",

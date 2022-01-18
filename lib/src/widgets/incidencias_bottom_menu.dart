@@ -85,23 +85,23 @@ class IncidenciasBottomMenu extends StatelessWidget {
                 ),
               ),
             // STATISTICS - SLIDE(3)
-            GestureDetector(
-              onTap: () {
-                _homeProviderReader.currentSlide = 3;
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const StatisticsPage()),
-                    (route) => false);
-              },
-              child: Icon(
-                Icons.bar_chart,
-                color: _homeProviderWatcher.currentSlide == 3
-                    ? incidenciasESCOM
-                    : Colors.white,
-                size: 40.h,
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     _homeProviderReader.currentSlide = 3;
+            //     Navigator.pushAndRemoveUntil(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => const StatisticsPage()),
+            //         (route) => false);
+            //   },
+            //   child: Icon(
+            //     Icons.bar_chart,
+            //     color: _homeProviderWatcher.currentSlide == 3
+            //         ? incidenciasESCOM
+            //         : Colors.white,
+            //     size: 40.h,
+            //   ),
+            // ),
             // USER PROFILE - SLIDE(4)
             GestureDetector(
               onTap: () {

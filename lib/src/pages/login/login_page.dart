@@ -75,16 +75,15 @@ class LoginPage extends StatelessWidget {
                     IncidenciasButton(
                       callback: () async {
                         _homeProvider.currentSlide = 0;
+                        // // final Response resp = await _authProviderWatcher.login(
+                        // //     '18dave2@gmail.com', '1z23hxR74');
+                        // // final Response resp = await _authProviderWatcher.login(
+                        // //     'jvelazquezg6@gmail.com', 'Password123%');
                         // final Response resp = await _authProviderWatcher.login(
-                        //     '18dave2@gmail.com', '1z23hxR74');
-                        // final Response resp = await _authProviderWatcher.login(
-                        //     'jvelazquezg6@gmail.com', 'Password123%');
-                        final Response resp = await _authProviderWatcher.login(
-                            'tanyabruce@gmail.com', 'Password123%');
+                        //     'tanyabruce@gmail.com', 'Password123%');
 
-                        // await _authProviderWatcher.login(
-                        //     _emailController.text,
-                        //     _passwordController.text);
+                        final Response resp = await _authProviderWatcher.login(
+                            _emailController.text, _passwordController.text);
                         if (resp.statusCode == 200 || resp.statusCode == 201) {
                           Navigator.pushAndRemoveUntil(
                               context,
@@ -108,21 +107,21 @@ class LoginPage extends StatelessWidget {
                       loading: _authProviderReader.loading,
                     ),
                     const SizedBox(height: 30),
-                    GestureDetector(
-                      child: Text(
-                        "¿Olvidaste tu contraseña?",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(color: incidenciasIPN),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage()));
-                      },
-                    )
+                    // GestureDetector(
+                    //   child: Text(
+                    //     "¿Olvidaste tu contraseña?",
+                    //     style: Theme.of(context)
+                    //         .textTheme
+                    //         .bodyText1
+                    //         ?.copyWith(color: incidenciasIPN),
+                    //   ),
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) => ForgotPasswordPage()));
+                    //   },
+                    // )
                   ],
                 ),
               ),
