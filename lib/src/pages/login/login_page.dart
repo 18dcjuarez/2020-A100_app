@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gestion/src/providers/auth_provider.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,9 +28,11 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeProvider _homeProvider = context.read<HomeProvider>();
+    final AuthProvider _authProviderWatcher = context.watch<AuthProvider>();
+    final AuthProvider _authProviderReader = context.watch<AuthProvider>();
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().screenHeight,
           width: double.infinity,
           child: Column(
@@ -69,33 +73,55 @@ class LoginPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 30),
                     IncidenciasButton(
-                      callback: () {
+                      callback: () async {
                         _homeProvider.currentSlide = 0;
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()),
-                            (route) => false);
+                        // // final Response resp = await _authProviderWatcher.login(
+                        // //     '18dave2@gmail.com', '1z23hxR74');
+                        // // final Response resp = await _authProviderWatcher.login(
+                        // //     'jvelazquezg6@gmail.com', 'Password123%');
+                        // final Response resp = await _authProviderWatcher.login(
+                        //     'tanyabruce@gmail.com', 'Password123%');
+
+                        final Response resp = await _authProviderWatcher.login(
+                            _emailController.text, _passwordController.text);
+                        if (resp.statusCode == 200 || resp.statusCode == 201) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()),
+                              (route) => false);
+                        } else if (resp.statusCode == 401) {
+                          IncidenciasFlushbar.showBar(
+                              context,
+                              'Credenciales erroneas',
+                              'Tu usuario o contraseña estan mal');
+                          return;
+                        } else {
+                          IncidenciasFlushbar.showBar(context, 'Error',
+                              'Ocurrio un error iniesperado al iniciar sesión');
+                          return;
+                        }
                       },
                       width: double.infinity,
                       text: 'INGRESAR',
+                      loading: _authProviderReader.loading,
                     ),
                     const SizedBox(height: 30),
-                    GestureDetector(
-                      child: Text(
-                        "¿Olvidaste tu contraseña?",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(color: incidenciasIPN),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage()));
-                      },
-                    )
+                    // GestureDetector(
+                    //   child: Text(
+                    //     "¿Olvidaste tu contraseña?",
+                    //     style: Theme.of(context)
+                    //         .textTheme
+                    //         .bodyText1
+                    //         ?.copyWith(color: incidenciasIPN),
+                    //   ),
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) => ForgotPasswordPage()));
+                    //   },
+                    // )
                   ],
                 ),
               ),

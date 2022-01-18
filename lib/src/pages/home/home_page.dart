@@ -2,16 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestion/src/pages/inbox/inbox_page.dart';
 import 'package:gestion/src/pages/incidents_history/incidents_history_page.dart';
+import 'package:gestion/src/providers/incidents_provider.dart';
+import 'package:gestion/src/providers/user_provider.dart';
 import 'package:gestion/src/widgets/incidencias_bottom_menu.dart';
 import 'package:gestion/src/widgets/incidencias_widgets.dart';
 import 'package:gestion/theme.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const String id = "/home";
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int totalPendingIncidents = 0;
+
+  @override
+  void initState() {
+    Future.microtask(() => context.read<UserProvider>().getUser());
+    super.initState();
+  }
+
+  void getPending(int pending) {
+    setState(() {
+      totalPendingIncidents = pending;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final String now =
+        DateFormat('EEEEE 10, MMMM, y', 'es_MX').format(DateTime.now());
+    final List<String> nowSplit = now.split(',');
+    final UserProvider? _userProviderWatcher = context.watch<UserProvider>();
+    final IncidentsProvider? _incidentsProviderWatcher =
+        context.watch<IncidentsProvider>();
+    getPending(_incidentsProviderWatcher?.totalIncidents ?? 0);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -31,9 +61,12 @@ class HomePage extends StatelessWidget {
                       size: 40.h,
                     ),
                     SizedBox(width: 20.w),
-                    Text(
-                      'Bienvenido, David Cruz Juárez',
-                      style: Theme.of(context).textTheme.bodyText1,
+                    Expanded(
+                      child: Text(
+                        'Bienvenido, ${_userProviderWatcher?.user?.nombre} ${_userProviderWatcher?.user?.apPaterno} ${_userProviderWatcher?.user?.apMaterno}',
+                        maxLines: 2,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
                     ),
                   ],
                 ),
@@ -49,7 +82,7 @@ class HomePage extends StatelessWidget {
                         height: 15.h,
                       ),
                       Text(
-                        'lunes 18 de octubre del 2021',
+                        '${nowSplit[0]} de ${nowSplit[1]} del ${nowSplit[2]} ',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline1?.copyWith(
                             color: incidenciasIPN,
@@ -59,20 +92,19 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         height: 30.h,
                       ),
-                      IncidenciasButton(
-                          text: "2 incidencias en curso",
-                          width: double.infinity,
-                          callback: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const IncidentesHistoryPage()))),
+                      if (_userProviderWatcher?.user?.rol == "Personal docente")
+                        IncidenciasButton(
+                            // text: "$totalPendingIncidents incidencias en curso",
+                            text: "Ver mis incidencias en curso",
+                            width: double.infinity,
+                            callback: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const IncidentesHistoryPage()))),
                       SizedBox(
                         height: 350.h,
                       ),
-                      IncidenciasButton(
-                          text: 'ESTADÍSTICAS',
-                          callback: () => print('ESTADISTICAS'))
                     ],
                   ),
                 ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gestion/src/providers/auth_provider.dart';
 import 'package:gestion/src/widgets/incidencias_widgets.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   static const String id = "/forgot-password";
@@ -12,12 +14,13 @@ class ForgotPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthProvider authProviderWatcher = context.watch<AuthProvider>();
     return Scaffold(
       appBar: const IncidenciasAppBar(
         leadingText: 'LOGIN',
       ),
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: ScreenUtil().screenHeight,
           width: double.infinity,
           child: Column(
@@ -49,7 +52,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 30),
                     IncidenciasButton(
-                      callback: () => print('BUTTON'),
+                      callback: () => authProviderWatcher.passwordRestore(),
                       width: double.infinity,
                       text: 'SOLICITAR',
                     ),

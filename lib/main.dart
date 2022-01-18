@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestion/src/pages/inbox/inbox_page.dart';
+import 'package:gestion/src/providers/auth_provider.dart';
 import 'package:gestion/src/providers/incidents_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // GENERAL
 import 'package:gestion/theme.dart';
@@ -22,14 +24,16 @@ import 'package:gestion/src/providers/home_provider.dart';
 import 'package:gestion/src/providers/user_provider.dart';
 
 void main() async {
+  await dotenv.load();
   initializeDateFormatting('es_MX');
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: (_) => AuthProvider()),
       ChangeNotifierProvider(create: (_) => HomeProvider()),
       ChangeNotifierProvider(create: (_) => IncidentsProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider())
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
@@ -51,9 +55,9 @@ class MyApp extends StatelessWidget {
         home: RootPage(),
         routes: <String, WidgetBuilder>{
           ForgotPasswordPage.id: (_) => ForgotPasswordPage(),
-          HomePage.id: (_) => HomePage(),
-          InboxPage.id: (_) => InboxPage(),
-          IncidentesHistoryPage.id: (_) => IncidentesHistoryPage(),
+          HomePage.id: (_) => const HomePage(),
+          InboxPage.id: (_) => const InboxPage(),
+          IncidentesHistoryPage.id: (_) => const IncidentesHistoryPage(),
           LoginPage.id: (_) => LoginPage(),
           RootPage.id: (_) => RootPage(),
         },
